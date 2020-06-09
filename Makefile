@@ -1,12 +1,14 @@
-.PHONY: all aes_ap key_dumper clean
+include $(THEOS)/makefiles/common.mk
 
-all: aes_ap key_dumper
+ARCHS = arm64 arm64e
+TOOL_NAME=key_dumper aes_ap
+key_dumper_FILES = key_dumper.c
+key_dumper_FRAMEWORKS = IOKit
+key_dumper_CODESIGN_FLAGS = -Stfp0.plist
 
-aes_ap:
-	xcrun -sdk iphoneos clang -arch arm64 -Weverything golb.c aes_ap.c -o aes_ap -framework CoreFoundation -O2
+aes_ap_FILES = golb.c aes_ap.c
+key_dumper_CODESIGN_FLAGS = -Stfp0.plist
 
-key_dumper:
-	xcrun -sdk iphoneos clang -arch arm64 -arch arm64e -Weverything key_dumper.c -o key_dumper -framework IOKit -framework CoreFoundation -O2
 
-clean:
-	$(RM) aes_ap key_dumper
+include $(THEOS_MAKE_PATH)/tool.mk
+
